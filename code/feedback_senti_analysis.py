@@ -103,10 +103,8 @@ def df_filt_merge(tweets_df: DataFrame, empty_df: DataFrame, world_cities_df: Da
     city_range = range(len(city_list))
 
     ##Script start here ######
-    #for i in range(490, 501):
     for i in city_range:
-        #if i <= len(city_list)-1:
-        if i <= 1000:
+        if i <= len(city_list)-1:
             print(f"Working on number {i}/{len(city_list)}: {city_list[i]}")
             tweets_df_filt = tweets_df.filter(fn.col('location').contains(f"{city_list[i]}")).distinct()
             city_df_filt = world_cities_df.filter((fn.col('city')==(f"{city_list[i]}")) & (fn.col('long')==(f"{long_list[i]}")) & (fn.col('lat')==(f"{lat_list[i]}")))

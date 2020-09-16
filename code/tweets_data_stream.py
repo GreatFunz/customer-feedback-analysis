@@ -12,8 +12,8 @@ import os
 import datetime
 import json
 
-num_stream = 10
-word_search = "sleep"
+num_stream = 1000
+word_search = "put your product name"
 #Set a search criteria
 search_criteria= {"track":f"{word_search.replace('#', '').lower().strip('')}", "language":"en"}
 url = "https://stream.twitter.com/1.1/statuses/filter.json"
