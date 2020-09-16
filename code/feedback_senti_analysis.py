@@ -107,7 +107,10 @@ def df_filt_merge(tweets_df: DataFrame, empty_df: DataFrame, world_cities_df: Da
         if i <= len(city_list)-1:
             print(f"Working on number {i}/{len(city_list)}: {city_list[i]}")
             tweets_df_filt = tweets_df.filter(fn.col('location').contains(f"{city_list[i]}")).distinct()
-            city_df_filt = world_cities_df.filter((fn.col('city')==(f"{city_list[i]}")) & (fn.col('long')==(f"{long_list[i]}")) & (fn.col('lat')==(f"{lat_list[i]}")))
+            city_df_filt = (world_cities_df.filter((fn.col('city')==(f"{city_list[i]}")) 
+                                                   & (fn.col('long')==(f"{long_list[i]}")) 
+                                                   & (fn.col('lat')==(f"{lat_list[i]}"))))
+            
             icount2 = tweets_df_filt.count()
             
             if icount2 <= 0:
@@ -132,7 +135,9 @@ def df_filt_merge(tweets_df: DataFrame, empty_df: DataFrame, world_cities_df: Da
                     city_to_array = fn.udf(lambda city : [city] * int(icount2), ArrayType(StringType()))
                     city_df_filt_duplicate = city_df_filt.withColumn('city', city_to_array(city_df_filt.city))
                     city_df_filt_duplicate = city_df_filt_duplicate.withColumn('city', fn.explode(city_df_filt_duplicate.city))
-                    tweets_df_filt_join = (tweets_df_filt.join(city_df_filt_duplicate, tweets_df_filt.location.contains(city_df_filt_duplicate.city)))
+                    tweets_df_filt_join = (tweets_df_filt.join(city_df_filt_duplicate, tweets_df_filt
+                                                               .location.contains(city_df_filt_duplicate.city)))
+                    
                     print("perforing union of the dataframe")
                     empty_df =  empty_df.union(tweets_df_filt_join).distinct()
                     # rows = empty_df.count()
